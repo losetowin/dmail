@@ -9,8 +9,16 @@ public class TestMailCheck {
 
 	@Test
 	public void testMailCheck(){
-		MailSetting ms = new MailSetting("testemail@dutycode.com", "1234Qwer", "25", "smtp.exmail.qq.com");
-		String[] s = MailCheckUtil.removeUnvaliadEmail(new String[]{"zzh@dutycode.com", "530896339@qq.com"}, ms);
-		System.out.println(s);
+		MailSetting ms = new MailSetting("test@example.com", "pwd", "465", "host");
+		try {
+			String[]	s = MailCheckUtil.removeUnvaliadEmail(new String[]{"zzh@dutycode.com", "530896339@qq.com"}, ms);
+			for (String ss : s){
+				System.out.println(ss);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

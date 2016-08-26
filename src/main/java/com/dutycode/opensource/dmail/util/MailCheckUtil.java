@@ -1,5 +1,6 @@
 package com.dutycode.opensource.dmail.util;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,14 +13,15 @@ import com.dutycode.opensource.dmail.MailSetting;
 import com.sun.mail.smtp.SMTPTransport;
 import com.sun.mail.util.ASCIIUtility;
 import com.sun.mail.util.BASE64EncoderStream;
+import com.sun.mail.util.MailSSLSocketFactory;
 
 public class MailCheckUtil {
-	public static String[] removeUnvaliadEmail(String[] addresses, MailSetting mailSetting) {
+	public static String[] removeUnvaliadEmail(String[] addresses, MailSetting mailSetting) throws Exception {
 		List<String> list = Arrays.asList(addresses);
 		return removeUnvaliadEmail(list, mailSetting);
 	}
 
-	public static String[] removeUnvaliadEmail(List<String> addresses, MailSetting mailSetting) {
+	public static String[] removeUnvaliadEmail(List<String> addresses, MailSetting mailSetting) throws Exception {
 
 		ArrayList<String> validateAddresses = new ArrayList<String>();
 
@@ -30,6 +32,13 @@ public class MailCheckUtil {
 			Properties properties = new Properties();
 			properties.put("mail.smtp.host", mailSetting.getHost());
 			properties.put("mail.smtp.port", mailSetting.getPort());
+			
+			//用于支持ssl
+			MailSSLSocketFactory sf = new MailSSLSocketFactory();  
+		    sf.setTrustAllHosts(true);  
+		    properties.put("mail.smtp.ssl.enable", "true");  
+		    properties.put("mail.smtp.ssl.socketFactory", sf); 
+		    
 			Session sendSession = Session.getDefaultInstance(properties);
 			smptTrans = (SMTPTransport) sendSession.getTransport("smtp");
 			smptTrans.connect(mailSetting.getHost(),
