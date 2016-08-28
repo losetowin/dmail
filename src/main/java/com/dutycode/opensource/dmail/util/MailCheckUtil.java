@@ -33,11 +33,14 @@ public class MailCheckUtil {
 			properties.put("mail.smtp.host", mailSetting.getHost());
 			properties.put("mail.smtp.port", mailSetting.getPort());
 			
-			//用于支持ssl
-			MailSSLSocketFactory sf = new MailSSLSocketFactory();  
-		    sf.setTrustAllHosts(true);  
-		    properties.put("mail.smtp.ssl.enable", "true");  
-		    properties.put("mail.smtp.ssl.socketFactory", sf); 
+			if ("465".equals(mailSetting.getPort())){
+				//用于支持ssl
+				MailSSLSocketFactory sf = new MailSSLSocketFactory();  
+			    sf.setTrustAllHosts(true);  
+			    properties.put("mail.smtp.ssl.enable", "true");  
+			    properties.put("mail.smtp.ssl.socketFactory", sf); 
+			}
+			
 		    
 			Session sendSession = Session.getDefaultInstance(properties);
 			smptTrans = (SMTPTransport) sendSession.getTransport("smtp");
